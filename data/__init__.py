@@ -1,5 +1,4 @@
 import torch.utils.data
-from data.base_dataset import collate_fn
 import threading
 
 
@@ -7,10 +6,16 @@ def CreateDataset(opt):
     """loads dataset class"""
 
     if opt.arch == 'vae' or opt.arch == 'gan':
-        from data.grasp_sampling_data import GraspSamplingData
+        if opt.dataset_type == "acronym":
+            from data.grasp_sampling_data_acronym import GraspSamplingData
+        else:
+            from data.grasp_sampling_data_6dof import GraspSamplingData
         dataset = GraspSamplingData(opt)
     else:
-        from data.grasp_evaluator_data import GraspEvaluatorData
+        if opt.dataset_type == "acronym":
+            from data.grasp_evaluator_data_acronym import GraspEvaluatorData
+        else:
+            from data.grasp_evaluator_data_6dof import GraspEvaluatorData
         dataset = GraspEvaluatorData(opt)
     return dataset
 
@@ -20,6 +25,10 @@ class DataLoader:
     def __init__(self, opt):
         self.opt = opt
         self.dataset = CreateDataset(opt)
+        if opt.dataset_type == "acronym":
+            from data.base_dataset_acronym import collate_fn
+        else:
+            from data.base_dataset_6dof import collate_fn
         self.dataloader = torch.utils.data.DataLoader(
             self.dataset,
             batch_size=opt.num_objects_per_batch,

@@ -1,6 +1,6 @@
 import os
 import torch
-from data.base_dataset import BaseDataset, NoPositiveGraspsException
+from data.base_dataset_acronym import BaseDataset, NoPositiveGraspsException
 import numpy as np
 from utils import utils
 import random

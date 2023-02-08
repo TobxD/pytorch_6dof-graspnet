@@ -15,6 +15,12 @@ class BaseOptions:
     def initialize(self):
         # data params
         self.parser.add_argument(
+            '--dataset_type',
+            type=str,
+            default='acronym',
+            choices={"6dof", "acronym"},
+            help='which dataset format - the original 6dof data or acronym')
+        self.parser.add_argument(
             '--dataset_root_folder',
             type=str,
             default=

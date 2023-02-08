@@ -130,6 +130,8 @@ class BaseDataset(data.Dataset):
             ratio_of_grasps_to_be_used=self.opt.grasps_ratio,
             return_all_grasps=return_all_grasps)
 
+        print("returning:", pos_grasps[0].shape, pos_qualities[0].shape, neg_grasps[0].shape, neg_qualities[0].shape, cad, cad_path, cad_scale)
+
         if self.caching:
             self.cache[file_name] = (pos_grasps, pos_qualities, neg_grasps,
                                      neg_qualities, cad, cad_path, cad_scale)
@@ -318,6 +320,7 @@ class BaseDataset(data.Dataset):
                                          self.opt.splits_folder_name,
                                          split_file)))[self.opt.dataset_split]
                 ]
+        print(files[:10])
         return files
 
 

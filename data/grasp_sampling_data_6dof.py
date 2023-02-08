@@ -1,6 +1,6 @@
 import os
 import torch
-from data.base_dataset import BaseDataset, NoPositiveGraspsException
+from data.base_dataset_6dof import BaseDataset, NoPositiveGraspsException
 import numpy as np
 from utils import utils
 
@@ -20,6 +20,7 @@ class GraspSamplingData(BaseDataset):
 
     def __getitem__(self, index):
         path = self.paths[index]
+        print(path)
         pos_grasps, pos_qualities, _, _, _, cad_path, cad_scale = self.read_grasp_file(
             path)
         meta = {}

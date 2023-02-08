@@ -1,9 +1,6 @@
 import time
 from options.train_options import TrainOptions
-if True:
-    from acronym_data import DataLoader
-else:
-    from data import DataLoader
+from data import DataLoader
 from models import create_model
 from utils.writer import Writer
 from test import run_test
