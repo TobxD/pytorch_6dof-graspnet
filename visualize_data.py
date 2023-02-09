@@ -16,17 +16,29 @@ def main():
         return
 
     dataset = DataLoader(opt)
-    dataset_size = len(dataset) * opt.num_grasps_per_object
-    cnt = 5
+    cnt = 1
     for i, data in enumerate(dataset):
-        pprint({
-            k: data[k].shape for k in data
-        })
-        pc = data["pc"][0]
-        grasp = data["grasp_rt"][0].reshape(4,4)
-        print(grasp.shape)
+        #pprint({
+        #    k: data[k].shape for k in data
+        #})
+        if np.random.rand() > 0.5:
+            ind = np.argmin(data["quality"])
+        else:
+            ind = 0
+        pc = data["pc"][ind]
+        print("quality:", data["quality"][ind])
         mlab.figure(bgcolor=(1, 1, 1))
-        draw_scene(pc, grasps=[grasp])
+        grasp = data["grasp_rt"][ind]
+        if grasp.shape[-1] == 16:
+            grasp = grasp.reshape(4,4)
+            draw_scene(pc, grasps=[grasp])
+        else:
+            draw_scene(pc)
+            red = np.array([255, 0, 0])
+            green = np.array([0, 255, 0])
+            qual = (data["quality"][ind]/2 + 0.5)
+            colors = qual * green + (1-qual) * red
+            draw_scene(grasp, pc_color=colors)
         print('close the window to continue to next object . . .')
         mlab.show()
         cnt -= 1

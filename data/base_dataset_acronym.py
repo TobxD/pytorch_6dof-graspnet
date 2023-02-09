@@ -130,8 +130,6 @@ class BaseDataset(data.Dataset):
             ratio_of_grasps_to_be_used=self.opt.grasps_ratio,
             return_all_grasps=return_all_grasps)
 
-        print("returning:", pos_grasps[0].shape, pos_qualities[0].shape, neg_grasps[0].shape, neg_qualities[0].shape, cad, cad_path, cad_scale)
-
         if self.caching:
             self.cache[file_name] = (pos_grasps, pos_qualities, neg_grasps,
                                      neg_qualities, cad, cad_path, cad_scale)
@@ -302,21 +300,6 @@ class BaseDataset(data.Dataset):
             self.ninput_channels = transform_dict['ninput_channels']
 
     def make_dataset(self):
-        # TODO: train/test split
-        # TODO: fix to make sure that all meshes are available
-        files = os.listdir(os.path.join(self.opt.dataset_root_folder, "grasps"))
-        print("total number of files:",len(files))
-        names = [(name, name[name.find("_")+1:]) for name in files]
-        names = [(f, name[:name.find("_")]+".obj") for (f, name) in names]
-        mesh_files = set(os.listdir("./../watertight/shapeNetSem/"))
-        files = [
-            os.path.join(self.opt.dataset_root_folder, "grasps", f)
-                for (f, name) in names
-                if name in mesh_files
-        ]
-        print("remaining:", len(files))
-        return files
-
         split_files = os.listdir(
             os.path.join(self.opt.dataset_root_folder,
                          self.opt.splits_folder_name))

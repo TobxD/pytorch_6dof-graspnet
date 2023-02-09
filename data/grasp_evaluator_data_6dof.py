@@ -67,11 +67,11 @@ class GraspEvaluatorData(BaseDataset):
         output_cad_scales = np.asarray([cad_scale] * self.opt.batch_size,
                                        np.float32)
 
-        num_positive = int(self.opt.batch_size * self.opt.ratio_positive)
+        num_positive = int(self.opt.batch_size * self.ratio_positive)
         positive_clusters = self.sample_grasp_indexes(num_positive, pos_grasps,
                                                       pos_qualities)
         num_hard_negative = int(self.opt.batch_size *
-                                self.opt.ratio_hardnegative)
+                                self.ratio_hardnegative)
         num_flex_negative = self.opt.batch_size - num_positive - num_hard_negative
         negative_clusters = self.sample_grasp_indexes(num_flex_negative,
                                                       neg_grasps,
