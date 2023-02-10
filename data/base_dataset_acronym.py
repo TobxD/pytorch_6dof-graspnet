@@ -152,27 +152,20 @@ class BaseDataset(data.Dataset):
         if num_clusters <= 0:
             raise NoPositiveGraspsException
 
-        #json_dict = json.load(open(json_path))
         h5_file = h5py.File(h5_path, "r")
 
-        #object_model_path = os.path.join(root_folder, h5_file["object"]["file"][()])
-        # TODO: fix path
         _, mesh_file_name = os.path.split(h5_file["object"]["file"][()])
-        object_model_path = os.path.join("../watertight/shapeNetSem", mesh_file_name)
+        object_model_path = os.path.join(root_folder, "meshes", mesh_file_name)
         object_scale = h5_file["object"]["scale"][()]
-        #object_model = Object(os.path.join(root_folder, json_dict['object']))
         object_model = Object(object_model_path)
-        #object_model.rescale(json_dict['object_scale'])
         object_model.rescale(object_scale)
         object_model = object_model.mesh
         object_mean = np.mean(object_model.vertices, 0, keepdims=1)
 
         object_model.vertices -= object_mean
-        #grasps = np.asarray(json_dict['transforms'])
         grasps = np.asarray(h5_file['grasps']['transforms'][()])
         grasps[:, :3, 3] -= object_mean
 
-        #flex_qualities = np.asarray(json_dict[quality])
         flex_qualities = np.asarray(h5_file["grasps"]['qualities']['flex']['object_in_gripper'][()])
         heuristic_qualities = np.ones(flex_qualities.shape)
         #try:
